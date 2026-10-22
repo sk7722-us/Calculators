@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EWCC OSHA Days Calculator</title>
+<style>
+  :root{
+    --ink:#17212b; --muted:#66717d; --line:#dfe5ea; --bg:#f6f8fa;
+    --card:#fff; --accent:#1d6f68; --accent2:#e8f4f1;
+    --good:#16704b; --goodbg:#eaf7f0; --warn:#8a5a00; --warnbg:#fff6df;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);font-family:Inter,Arial,sans-serif;color:var(--ink)}
+  .wrap{max-width:780px;margin:0 auto;padding:28px 18px 40px}
+  .hero{background:var(--ink);color:white;border-radius:18px;padding:28px;margin-bottom:18px}
+  .eyebrow{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;opacity:.75}
+  h1{margin:7px 0 8px;font-size:31px;line-height:1.1}
+  .hero p{margin:0;line-height:1.55;color:#dce5eb}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:18px}
+  .card h2{font-size:18px;margin:0 0 5px}
+  .sub{font-size:13px;color:var(--muted);margin-bottom:18px;line-height:1.45}
+  .fields{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+  .field label{display:block;font-weight:700;font-size:14px;margin-bottom:6px}
+  input[type=date]{width:100%;border:1px solid #cbd3da;border-radius:9px;padding:11px 12px;font-size:16px;background:#fff;min-height:44px}
+  .results{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .metric{border:1px solid var(--line);border-radius:12px;padding:18px;background:#fbfcfd}
+  .metric .label{font-size:12px;color:var(--muted);font-weight:700;line-height:1.3}
+  .metric .value{font-size:30px;font-weight:900;margin-top:5px}
+  .metric.good{background:var(--goodbg);border-color:#ccebdc}
+  .metric.good .value{color:var(--good)}
+  .status{margin-top:12px;border-radius:12px;padding:14px 16px;background:var(--accent2);font-size:14px;line-height:1.5}
+  .status strong{color:var(--accent)}
+  .warning{background:var(--warnbg);color:#684600}
+  .fine{font-size:11px;color:var(--muted);line-height:1.55;margin-top:15px}
+  @media(max-width:600px){
+    .fields,.results{grid-template-columns:1fr}
+    h1{font-size:27px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="hero">
+    <div class="eyebrow">Employer Workers' Compensation Coalition</div>
+    <h1>OSHA Days Calculator</h1>
+    <p>Enter the first day the employee was away from work or on restricted work and the last day. Get the calendar-day count and the OSHA count instantly.</p>
+  </section>
+
+  <section class="card">
+    <h2>Enter the dates</h2>
+    <div class="sub">
+      For OSHA recordkeeping, use the <strong>first day away/restricted</strong> — not the day of injury or onset — as your beginning date.
+    </div>
+
+    <div class="fields">
+      <div class="field">
+        <label for="start">First day away / restricted</label>
+        <input id="start" type="date" aria-describedby="dateHelp">
+      </div>
+      <div class="field">
+        <label for="end">Last day away / restricted</label>
+        <input id="end" type="date">
+      </div>
+    </div>
+
+    <div class="fine" id="dateHelp">
+      OSHA generally begins counting on the day after the injury or illness begins. Once counting begins, days are calendar days, including weekends and holidays when the employee is unable to work because of the work-related injury or illness.
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Your count</h2>
+    <div class="results">
+      <div class="metric">
+        <div class="label">Calendar days between the dates</div>
+        <div class="value" id="calendarDays">—</div>
+      </div>
+      <div class="metric good">
+        <div class="label">OSHA days to record</div>
+        <div class="value" id="oshaDays">—</div>
+      </div>
+    </div>
+
+    <div class="status" id="status" aria-live="polite">
+      Enter both dates to calculate the count.
+    </div>
+
+    <div class="fine">
+      OSHA permits employers to stop counting days away from work or restricted work/job transfer when the case reaches <strong>180 days</strong>. If the actual count exceeds 180, the OSHA Log may show 180 (or 180+).
+      <br><br>
+      This calculator is an educational counting aid, not a determination of whether a case is recordable or how a particular case should be classified.
+    </div>
+  </section>
+</div>
+
+<script>
+(function(){
+  const start = document.getElementById("start");
+  const end = document.getElementById("end");
+  const calendarDays = document.getElementById("calendarDays");
+  const oshaDays = document.getElementById("oshaDays");
+  const status = document.getElementById("status");
+
+  function parseDateUTC(value){
+    if(!value) return null;
+    const parts = value.split("-").map(Number);
+    if(parts.length !== 3 || parts.some(n => !Number.isInteger(n))) return null;
+    const d = new Date(Date.UTC(parts[0], parts[1]-1, parts[2]));
+    return Number.isNaN(d.getTime()) ? null : d;
+  }
+
+  function daysInclusive(a,b){
+    return Math.floor((b-a)/86400000) + 1;
+  }
+
+  function calculate(){
+    const s = parseDateUTC(start.value);
+    const e = parseDateUTC(end.value);
+
+    calendarDays.textContent = "—";
+    oshaDays.textContent = "—";
+
+    if(!s || !e){
+      status.className = "status";
+      status.textContent = "Enter both dates to calculate the count.";
+      return;
+    }
+
+    if(e < s){
+      status.className = "status warning";
+      status.textContent = "The last day cannot be earlier than the first day.";
+      return;
+    }
+
+    const actual = daysInclusive(s,e);
+    const capped = Math.min(actual,180);
+
+    calendarDays.textContent = actual.toLocaleString("en-US");
+    oshaDays.textContent = capped.toLocaleString("en-US");
+
+    if(actual > 180){
+      status.className = "status warning";
+      status.innerHTML = "<strong>180-day cap reached.</strong> The actual calendar period is " +
+        actual.toLocaleString("en-US") +
+        " days, but the OSHA day count is capped at 180.";
+    } else if(actual === 180){
+      status.className = "status";
+      status.innerHTML = "<strong>Exactly 180 days.</strong> The OSHA day count has reached the maximum.";
+    } else {
+      status.className = "status";
+      status.innerHTML = "<strong>" + capped.toLocaleString("en-US") +
+        " OSHA day" + (capped === 1 ? "" : "s") +
+        " to record.</strong> The count is based on calendar days.";
+    }
+  }
+
+  start.addEventListener("input", calculate);
+  end.addEventListener("input", calculate);
+})();
+</script>
+</body>
+</html>
