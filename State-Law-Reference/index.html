@@ -1,0 +1,386 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EWCC State Law Reference Hub</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 16px;
+    background: #102b38;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+}
+
+.header h2 {
+    margin-bottom: 8px;
+    color: #10c6cb;
+}
+
+.header p {
+    margin-top: 0;
+    line-height: 1.5;
+}
+
+.selector-box {
+    margin: 20px 0;
+}
+
+.selector-box label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #10c6cb;
+    background: #ffffff;
+    color: #102b38;
+    font-size: 16px;
+}
+
+.law-card {
+    display: none;
+    margin-top: 20px;
+    border: 1px solid #10c6cb;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.law-card.visible {
+    display: block;
+}
+
+.state-title-banner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: 16px;
+    background: #164653;
+}
+
+.state-name {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.system-badge {
+    padding: 5px 10px;
+    border-radius: 20px;
+    background: #10c6cb;
+    color: #102b38;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.section-panel {
+    border-top: 1px solid #31515b;
+}
+
+.panel-trigger {
+    width: 100%;
+    padding: 15px;
+    border: 0;
+    background: #173b49;
+    color: #10c6cb;
+    text-align: left;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.panel-trigger::after {
+    content: "+";
+    float: right;
+}
+
+.panel-trigger[aria-expanded="true"]::after {
+    content: "−";
+}
+
+.panel-content {
+    display: none;
+    background: #102b38;
+}
+
+.panel-content.open {
+    display: block;
+}
+
+.panel-inner {
+    padding: 8px 15px 15px;
+}
+
+.data-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid #31515b;
+}
+
+.data-label {
+    flex: 1;
+    color: #ffffff;
+}
+
+.data-value {
+    flex: 1;
+    color: #10c6cb;
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+.disclaimer {
+    margin-top: 18px;
+    color: #d5e3e7;
+    font-size: 12px;
+    line-height: 1.5;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+    <div class="header">
+        <h2>State Law Reference Hub</h2>
+        <p>Advanced compliance metrics for Coalition members</p>
+    </div>
+
+    <div class="selector-box">
+        <label for="stateSelect">Select Jurisdiction</label>
+
+        <select id="stateSelect">
+            <option value="">-- Choose a State --</option>
+            <option value="AL">Alabama</option>
+            <option value="AK">Alaska</option>
+            <option value="AZ">Arizona</option>
+            <option value="CA">California</option>
+            <option value="FL">Florida</option>
+            <option value="IL">Illinois</option>
+            <option value="TX">Texas</option>
+        </select>
+    </div>
+
+    <div id="lawCard" class="law-card" aria-live="polite">
+
+        <div class="state-title-banner">
+            <span id="cardStateName" class="state-name"></span>
+            <span id="cardSystem" class="system-badge"></span>
+        </div>
+
+        <div class="section-panel">
+            <button class="panel-trigger"
+                    type="button"
+                    aria-expanded="true">
+                Mandate &amp; Coverage Thresholds
+            </button>
+
+            <div class="panel-content open">
+                <div class="panel-inner">
+                    <div class="data-row">
+                        <span class="data-label">Insurance Mandate</span>
+                        <span id="cardMandate" class="data-value"></span>
+                    </div>
+
+                    <div class="data-row">
+                        <span class="data-label">Employee Threshold</span>
+                        <span id="cardThreshold" class="data-value"></span>
+                    </div>
+
+                    <div class="data-row">
+                        <span class="data-label">Exceptions / Definitions</span>
+                        <span id="cardEmployeeDef" class="data-value"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-panel">
+            <button class="panel-trigger"
+                    type="button"
+                    aria-expanded="true">
+                Indemnity &amp; Time Constraints
+            </button>
+
+            <div class="panel-content open">
+                <div class="panel-inner">
+                    <div class="data-row">
+                        <span class="data-label">Max TTD Benefit Rate</span>
+                        <span id="cardMaxTTD" class="data-value"></span>
+                    </div>
+
+                    <div class="data-row">
+                        <span class="data-label">Standard Comp Rate</span>
+                        <span id="cardCompRate" class="data-value"></span>
+                    </div>
+
+                    <div class="data-row">
+                        <span class="data-label">Waiting / Retro Period</span>
+                        <span id="cardWaitingPeriod" class="data-value"></span>
+                    </div>
+
+                    <div class="data-row">
+                        <span class="data-label">Reporting Window</span>
+                        <span id="cardReportingWindow" class="data-value"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <p class="disclaimer">
+        Reference information only. Confirm current requirements with
+        the applicable state agency or qualified legal counsel before
+        making compliance decisions.
+    </p>
+</div>
+
+<script>
+/*
+ * DEMONSTRATION DATA ONLY.
+ * Replace these placeholders with verified, current state-law data
+ * before publishing this tool for employer compliance use.
+ */
+const stateData = {
+    AL: {
+        name: "Alabama",
+        system: "Competitive",
+        mandate: "Verification required",
+        threshold: "Verification required",
+        employeeDef: "Verify statutory exemptions",
+        maxTTD: "Verify current rate",
+        compRate: "Verify current rate",
+        waitingPeriod: "Verify current rule",
+        reportingWindow: "Verify current deadline"
+    },
+
+    AK: {
+        name: "Alaska",
+        system: "Competitive",
+        mandate: "Verification required",
+        threshold: "Verification required",
+        employeeDef: "Verify statutory exemptions",
+        maxTTD: "Verify current rate",
+        compRate: "Verify current rate",
+        waitingPeriod: "Verify current rule",
+        reportingWindow: "Verify current deadline"
+    },
+
+    AZ: {
+        name: "Arizona",
+        system: "Competitive",
+        mandate: "Verification required",
+        threshold: "Verification required",
+        employeeDef: "Verify statutory exemptions",
+        maxTTD: "Verify current rate",
+        compRate: "Verify current rate",
+        waitingPeriod: "Verify current rule",
+        reportingWindow: "Verify current deadline"
+    },
+
+    CA: {
+        name: "California",
+        system: "Competitive",
+        mandate: "Verification required",
+        threshold: "Verification required",
+        employeeDef: "Verify statutory exemptions",
+        maxTTD: "Verify current rate",
+        compRate: "Verify current rate",
+        waitingPeriod: "Verify current rule",
+        reportingWindow: "Verify current deadline"
+    },
+
+    FL: {
+        name: "Florida",
+        system: "Competitive",
+        mandate: "Verification required",
+        threshold: "Verification required",
+        employeeDef: "Verify statutory exemptions",
+        maxTTD: "Verify current rate",
+        compRate: "Verify current rate",
+        waitingPeriod: "Verify current rule",
+        reportingWindow: "Verify current deadline"
+    },
+
+    IL: {
+        name: "Illinois",
+        system: "Competitive",
+        mandate: "Verification required",
+        threshold: "Verification required",
+        employeeDef: "Verify statutory exemptions",
+        maxTTD: "Verify current rate",
+        compRate: "Verify current rate",
+        waitingPeriod: "Verify current rule",
+        reportingWindow: "Verify current deadline"
+    },
+
+    TX: {
+        name: "Texas",
+        system: "Non-subscriber option",
+        mandate: "Verify subscriber requirements",
+        threshold: "Verify applicable requirements",
+        employeeDef: "Verify statutory exemptions",
+        maxTTD: "Verify current rate",
+        compRate: "Verify current rate",
+        waitingPeriod: "Verify current rule",
+        reportingWindow: "Verify current deadline"
+    }
+};
+
+const stateSelect = document.getElementById("stateSelect");
+const lawCard = document.getElementById("lawCard");
+
+function updateLawCard() {
+    const stateCode = stateSelect.value;
+    const data = stateData[stateCode];
+
+    if (!data) {
+        lawCard.classList.remove("visible");
+        return;
+    }
+
+    document.getElementById("cardStateName").textContent = data.name;
+    document.getElementById("cardSystem").textContent = data.system;
+    document.getElementById("cardMandate").textContent = data.mandate;
+    document.getElementById("cardThreshold").textContent = data.threshold;
+    document.getElementById("cardEmployeeDef").textContent = data.employeeDef;
+    document.getElementById("cardMaxTTD").textContent = data.maxTTD;
+    document.getElementById("cardCompRate").textContent = data.compRate;
+    document.getElementById("cardWaitingPeriod").textContent = data.waitingPeriod;
+    document.getElementById("cardReportingWindow").textContent = data.reportingWindow;
+
+    lawCard.classList.add("visible");
+}
+
+stateSelect.addEventListener("change", updateLawCard);
+
+document.querySelectorAll(".panel-trigger").forEach(button => {
+    button.addEventListener("click", () => {
+        const content = button.nextElementSibling;
+        const isOpen = content.classList.toggle("open");
+        button.setAttribute("aria-expanded", String(isOpen));
+    });
+});
+</script>
+</body>
+</html>
+```
