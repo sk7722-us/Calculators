@@ -1,1 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>State Workers' Compensation Legal Reference | EWCC</title>
+
+<style>
+    :root {
+        --navy: #17324d;
+        --blue: #245b83;
+        --light-blue: #eef4f8;
+        --gold: #c49a45;
+        --text: #263746;
+        --muted: #647586;
+        --white: #ffffff;
+        --border: #d8e1e8;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        padding: 24px 16px;
+        background: #f3f6f8;
+        color: var(--text);
+        font-family: Arial, Helvetica, sans-serif;
+        line-height: 1.6;
+    }
+
+    .container {
+        max-width: 700px;
+        margin: 0 auto;
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(23, 50, 77, 0.07);
+    }
+
+    .header {
+        background: var(--navy);
+        color: var(--white);
+        padding: 30px 24px;
+        text-align: center;
+        border-bottom: 5px solid var(--gold);
+    }
+
+    .brand {
+        margin: 0 0 8px;
+        color: #e5c57d;
+        font-size: 13px;
+        font-weight: bold;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+    }
+
+    .header h1 {
+        margin: 0;
+        font-size: clamp(23px, 5vw, 32px);
+        line-height: 1.25;
+    }
+
+    .header p {
+        margin: 12px 0 0;
+        color: #e1e9ef;
+        font-size: 15px;
+    }
+
+    .content {
+        padding: 28px 24px;
+    }
+
+    .intro {
+        margin: 0 0 24px;
+        font-size: 16px;
+    }
+
+    .section-label {
+        display: block;
+        margin-bottom: 9px;
+        color: var(--navy);
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    select {
+        width: 100%;
+        min-height: 52px;
+        padding: 12px 14px;
+        border: 1px solid #aebdca;
+        border-radius: 7px;
+        background: white;
+        color: var(--text);
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    select:focus {
+        outline: 3px solid rgba(36, 91, 131, 0.2);
+        border-color: var(--blue);
+    }
+
+    .button {
+        display: block;
+        width: 100%;
+        margin-top: 16px;
+        padding: 15px 18px;
+        border: none;
+        border-radius: 7px;
+        background: var(--blue);
+        color: white;
+        font-size: 15px;
+        font-weight: bold;
+        letter-spacing: 0.4px;
+        cursor: pointer;
+        transition: background 0.2s ease;
+    }
+
+    .button:hover:not(:disabled) {
+        background: var(--navy);
+    }
+
+    .button:disabled {
+        background: #aab7c2;
+        cursor: not-allowed;
+    }
+
+    .status {
+        min-height: 24px;
+        margin: 12px 0 0;
+        color: var(--muted);
+        font-size: 13px;
+        text-align: center;
+    }
+
+    .info-box {
+        margin-top: 28px;
+        padding: 18px;
+        border-left: 4px solid var(--gold);
+        border-radius: 4px;
+        background: var(--light-blue);
+    }
+
+    .info-box h2 {
+        margin: 0 0 8px;
+        color: var(--navy);
+        font-size: 17px;
+    }
+
+    .info-box p {
+        margin: 0;
+        font-size: 14px;
+    }
+
+    .disclaimer {
+        margin-top: 24px;
+        padding-top: 18px;
+        border-top: 1px solid var(--border);
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+    .footer {
+        padding: 16px 20px;
+        background: #f8fafb;
+        color: var(--muted);
+        font-size: 12px;
+        text-align: center;
+    }
+
+    @media (max-width: 480px) {
+        body {
+            padding: 12px 8px;
+        }
+
+        .header {
+            padding: 25px 18px;
+        }
+
+        .content {
+            padding: 22px 18px;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <header class="header">
+        <p class="brand">EWCC | Employer Resources</p>
+
+        <h1>State Workers' Compensation Legal Reference</h1>
+
+        <p>Find state-specific workers' compensation legal resources.</p>
+    </header>
+
+    <main class="content">
+
+        <p class="intro">
+            Workers' compensation laws vary by state. Select a state below
+            to explore its legal compendium, including information on
+            compensability, employer responsibilities, and potential
+            legal defenses.
+        </p>
+
+        <label class="section-label" for="stateSelect">
+            Select a State or Jurisdiction
+        </label>
+
+        <select id="stateSelect" aria-describedby="selectionHelp">
+            <option value="">-- Choose a State --</option>
+
+            <option value="alabama">Alabama</option>
+            <option value="alaska">Alaska</option>
+            <option value="arizona">Arizona</option>
+            <option value="arkansas">Arkansas</option>
+            <option value="california">California</option>
+            <option value="colorado">Colorado</option>
+            <option value="connecticut">Connecticut</option>
+            <option value="delaware">Delaware</option>
+            <option value="district-of-columbia">District of Columbia</option>
+            <option value="florida">Florida</option>
+            <option value="georgia">Georgia</option>
+            <option value="hawaii">Hawaii</option>
+            <option value="idaho">Idaho</option>
+            <option value="illinois">Illinois</option>
+            <option value="indiana">Indiana</option>
+            <option value="iowa">Iowa</option>
+            <option value="kansas">Kansas</option>
+            <option value="kentucky">Kentucky</option>
+            <option value="louisiana">Louisiana</option>
+            <option value="maine">Maine</option>
+            <option value="maryland">Maryland</option>
+            <option value="massachusetts">Massachusetts</option>
+            <option value="michigan">Michigan</option>
+            <option value="minnesota">Minnesota</option>
+            <option value="mississippi">Mississippi</option>
+            <option value="missouri">Missouri</option>
+            <option value="montana">Montana</option>
+            <option value="nebraska">Nebraska</option>
+            <option value="nevada">Nevada</option>
+            <option value="new-hampshire">New Hampshire</option>
+            <option value="new-jersey">New Jersey</option>
+            <option value="new-mexico">New Mexico</option>
+            <option value="new-york">New York</option>
+            <option value="north-carolina">North Carolina</option>
+            <option value="north-dakota">North Dakota</option>
+            <option value="ohio">Ohio</option>
+            <option value="oklahoma">Oklahoma</option>
+            <option value="oregon">Oregon</option>
+            <option value="pennsylvania">Pennsylvania</option>
+            <option value="rhode-island">Rhode Island</option>
+            <option value="south-carolina">South Carolina</option>
+            <option value="south-dakota">South Dakota</option>
+            <option value="tennessee">Tennessee</option>
+            <option value="texas">Texas</option>
+            <option value="utah">Utah</option>
+            <option value="vermont">Vermont</option>
+            <option value="virginia">Virginia</option>
+            <option value="washington">Washington</option>
+            <option value="west-virginia">West Virginia</option>
+            <option value="wisconsin">Wisconsin</option>
+            <option value="wyoming">Wyoming</option>
+        </select>
+
+        <p id="selectionHelp" class="status" aria-live="polite">
+            Choose your state to access its legal compendium.
+        </p>
+
+        <button
+            id="viewButton"
+            class="button"
+            type="button"
+            disabled
+            onclick="openCompendium()">
+            VIEW STATE COMPENDIUM →
+        </button>
+
+        <section class="info-box">
+            <h2>Think Beyond the Claim</h2>
+
+            <p>
+                Could a notice requirement, statute of limitations,
+                compensability issue, or other legal consideration affect
+                a claim? Use the compendium as a starting point to identify
+                questions that may warrant further investigation.
+            </p>
+        </section>
+
+        <div class="disclaimer">
+            <strong>Important Notice:</strong> This page links to an
+            external legal resource published by ALFA International.
+            EWCC does not own or maintain that resource. The information
+            is provided for general educational purposes and is not legal
+            advice. Laws and circumstances vary by jurisdiction.
+            Verify current requirements and consult qualified legal
+            counsel before making claim decisions or relying on a
+            potential defense.
+        </div>
+
+    </main>
+
+    <footer class="footer">
+        Employer Workers' Compensation Coalition (EWCC)
+        <br>
+        Connecting employers with resources for informed decisions.
+    </footer>
+
+</div>
+
+<script>
+    const stateSelect = document.getElementById("stateSelect");
+    const viewButton = document.getElementById("viewButton");
+    const selectionHelp = document.getElementById("selectionHelp");
+
+    const baseUrl =
+        "https://www.alfainternational.com/compendium/workers-compensation/";
+
+    stateSelect.addEventListener("change", function () {
+        const slug = stateSelect.value;
+
+        viewButton.disabled = !slug;
+
+        if (slug) {
+            selectionHelp.textContent =
+                "Your selection: " +
+                stateSelect.options[stateSelect.selectedIndex].text +
+                ". Click below to open the compendium.";
+        } else {
+            selectionHelp.textContent =
+                "Choose your state to access its legal compendium.";
+        }
+    });
+
+    function openCompendium() {
+        const slug = stateSelect.value;
+
+        if (!slug) {
+            selectionHelp.textContent =
+                "Please select a state first.";
+            return;
+        }
+
+        const destination = baseUrl + slug + "/";
+
+        window.location.href = destination;
+    }
+</script>
+
+</body>
+</html>
